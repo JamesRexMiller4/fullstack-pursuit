@@ -122,7 +122,11 @@ const QuestionView = () => {
       <div className='categories-list'>
         <h2 onClick={getQuestions}>Categories</h2>
         <ul>
-          {}
+          {Object.keys(questionViewState.categories).map((id) => (
+            <li key={id} onClick={getByCategory(id)}>
+              <img className='category' src={`${questionViewState.categories[id]}.svg`}/>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
