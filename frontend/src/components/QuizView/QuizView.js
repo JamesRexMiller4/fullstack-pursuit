@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './QuizView.css';
-import $ from jquery;
+import $ from 'jquery';
 
 const questionsPerPlay = 5;
 
@@ -29,7 +29,7 @@ const QuizView = () => {
         return;
       }
     })
-  }, [])
+  })
 
   const selectCategory = ({ type, id=0 }) => {
     setQuizViewState({ ...quizViewState, quizCategory: {type, id}}, this.getNextQuestion)
@@ -41,12 +41,12 @@ const QuizView = () => {
 
   const getNextQuestion = () => {
     const previousQuestions = [...quizViewState.questions]
-    if (quizView.currentQuestion.id) { previousQuestions.push(quizViewState.currentQuestion.id)}
+    if (quizViewState.currentQuestion.id) { previousQuestions.push(quizViewState.currentQuestion.id)}
 
     $.ajax({
       url: `/quizzes`, //TODO: update request URL
       type: 'POST',
-      dataType: json,
+      dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
         previous_questions: previousQuestions,
@@ -74,16 +74,16 @@ const QuizView = () => {
   }
 
   const evaluateAnswer = () => {
-    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() //eslint-disable-line
     const answerArray = quizViewState.currentQuestion.answer.toLowerCase().split(' ');
     return answerArray.includes(formatGuess)
   }
 
   const submitGuess = (e) => {
-    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() //eslint-disable-line
     let evaluate = evaluateAnswer();
     setQuizViewState({
-      ...quizFormState,
+      ...quizViewState,
       numCorrect: !evaluate ? quizViewState.numCorrect : quizViewState.numCorrect + 1,
       showAnswer: true
     })
@@ -91,7 +91,7 @@ const QuizView = () => {
 
   const restartGame = () => {
     setQuizViewState({
-      ...quizFormState,
+      ...quizViewState,
       quizCategory: null,
       previousQuestions: [],
       showAnswer: false,
@@ -133,7 +133,7 @@ const QuizView = () => {
   }
 
   const renderCorrectAnswer = () => {
-    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() //eslint-disable-line
     let evaluate =  evaluateAnswer()
     return(
       <div className="quiz-play-holder">

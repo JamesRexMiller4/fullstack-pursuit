@@ -24,7 +24,7 @@ const FormView = () => {
         return;
       }
     })
-  }, [])
+  })
 
   const submitQuestion = (e) => {
     $.ajax({
@@ -67,7 +67,7 @@ const FormView = () => {
         </label>
         <label>
           Answer
-          <input type='text' name='answer' onChange={handleChane} />
+          <input type='text' name='answer' onChange={handleChange} />
         </label>
         <label>
           Difficulty

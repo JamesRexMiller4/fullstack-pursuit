@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './QuestionView.css';
+import Question from '../Question/Question';
 import Search from '../Search/Search';
-import $ from jquery;
+import $ from 'jquery';
 
 const QuestionView = () => {
   const [ questionViewState, setQuestionViewState ] = useState({
@@ -34,10 +35,10 @@ const QuestionView = () => {
 
   useEffect(() => {
     getQuestions();
-  }, [])
+  })
 
-  const selectPage(num) => {
-    setQuestionViewState({...questionViewState, {page:num}}, () => getQuestions())
+  const selectPage = (num) => {
+    setQuestionViewState({...questionViewState, page:num}, () => getQuestions())
   }
 
   const createPagination = () => {
@@ -73,7 +74,7 @@ const QuestionView = () => {
     })
   }
 
-  const submitSearch = () => {
+  const submitSearch = (searchTerm) => {
     $.ajax({
       url: `/questions`, //TODO: update request URL
       type: 'POST',
@@ -128,6 +129,23 @@ const QuestionView = () => {
             </li>
           ))}
         </ul>
+        <Search submitSearch={submitSearch} />
+      </div>
+      <div className="questions-list">
+        <h2>Questions</h2>
+        {questionViewState.questions.map((q, ind) => (
+          <Question
+            key={q.id}
+            question={q.question}
+            answer={q.answer}
+            category={questionViewState.categories[q.category]} 
+            difficulty={q.difficulty}
+            questionAction={questionAction(q.id)}
+          />
+        ))}
+        <div className="pagination-menu">
+          {this.createPagination()}
+        </div>
       </div>
     </div>
   );

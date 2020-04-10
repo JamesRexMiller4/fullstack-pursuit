@@ -15,12 +15,12 @@ import QuizView from './components/QuizView/QuizView';
 const App = () => {
   return (
     <div className="App">
-      <Header path />
+      <Header path={'/'} />
       <Router>
         <Switch>
-          <Route path="/" exact component={QuestionView} />
-          <Route path="/add" component={FormView} />
-          <Route path="/play" component={QuizView} />
+          <Route path={'/'} exact component={QuestionView} />
+          <Route path={'/add'} component={FormView} />
+          <Route path={"/play"} component={QuizView} />
           <Route component={QuestionView} />
         </Switch>
       </Router>
