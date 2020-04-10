@@ -4,10 +4,9 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 
 from flaskr import create_app
-from models import *
+from models import setup_db, Question, Category
 
 class TriviaTestCase(unittest.TestCase):
-
   def setUp(self):
     self.app = create_app()
     self.client = self.app.test_client
