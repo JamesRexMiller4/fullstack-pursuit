@@ -10,8 +10,7 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
   app = Flask(__name__)
   setup_db(app)
-  CORS(app)
-  # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+  cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
   @app.after_request
   def after_request(res):
@@ -21,13 +20,14 @@ def create_app(test_config=None):
 
   @app.route('/categories')
   def get_categories():
-    categories = Category.query.all()
+    categories = Category.query.order_by(Category.id).all()
 
     if len(categories) == 0:
       abort(404)
 
     return jsonify({
       "success": True,
-      "categories": categories})
+      "categories": categories
+    })
 
   return app
