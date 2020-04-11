@@ -20,6 +20,7 @@ const QuestionView = () => {
       console.log(data)
       setQuestionViewState({
         questions: data.questions,
+        page: questionViewState.page,
         totalQuestions: data.total_questions,
         categories: data.categories,
         currentCategory: data.current_category
@@ -35,8 +36,12 @@ const QuestionView = () => {
     getQuestions();
   }, [])
 
+  useEffect(() => {
+    getQuestions()
+  }, [questionViewState.page])
+
   const selectPage = (num) => {
-    setQuestionViewState({...questionViewState, page:num}, () => getQuestions())
+    setQuestionViewState({...questionViewState, page:num})
   }
 
   const createPagination = () => {
@@ -47,7 +52,7 @@ const QuestionView = () => {
         <span
           key={i}
           className={`page-num ${i === questionViewState.page ? 'active' : ''}`}
-          onClick={selectPage}>{i}
+          onClick={() => selectPage(i)}>{i}
         </span>)
     }
     return pageNumbers;

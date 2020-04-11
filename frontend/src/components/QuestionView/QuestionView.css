@@ -12,6 +12,10 @@
   width: 60%;
 }
 
+.categories-list > ul > li:hover {
+  cursor: pointer;
+}
+
 .questions-list {
   flex-basis: 75%;
   text-align: center;
@@ -60,6 +64,10 @@ span.page-num {
   font-weight: bolder;
   text-decoration: underline;
   font-size: 16px;
+}
+
+span:hover {
+  cursor: pointer
 }
 
 span.page-num.active {
