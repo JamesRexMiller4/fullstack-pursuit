@@ -13,7 +13,7 @@ const FormView = () => {
 
   useEffect(() => {
     $.ajax({
-      url: '/categories', //TODO: update request URL
+      url: 'http://localhost:5000/categories',
       type: 'GET',
       success: (result) => {
         setForm({ ...form, categories: result.categories})
@@ -28,7 +28,7 @@ const FormView = () => {
 
   const submitQuestion = (e) => {
     $.ajax({
-      url: '/questions', //TODO: update request URL
+      url: 'http://localhost:5000/questions',
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',

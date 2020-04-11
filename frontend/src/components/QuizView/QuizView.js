@@ -18,7 +18,7 @@ const QuizView = () => {
 
   useEffect(() => {
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `http://localhost:5000/categories`,
       type: 'GET',
       success: (result) => {
         setQuizViewState({ ...quizViewState, categories: result.categories })
@@ -44,7 +44,7 @@ const QuizView = () => {
     if (quizViewState.currentQuestion.id) { previousQuestions.push(quizViewState.currentQuestion.id)}
 
     $.ajax({
-      url: `/quizzes`, //TODO: update request URL
+      url: `http://localhost:5000/quizzes`,
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
