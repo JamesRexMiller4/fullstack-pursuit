@@ -1,0 +1,8 @@
+.App-header > h2:hover {
+  color: #1C90FF;
+  cursor: pointer;
+}
+
+.App-header > h1:hover {
+  cursor: pointer;
+}
