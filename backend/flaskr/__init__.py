@@ -22,7 +22,6 @@ def create_app(test_config=None):
   app = Flask(__name__)
   setup_db(app)
   CORS(app)
-  # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
   @app.after_request
   def after_request(response):
@@ -53,8 +52,8 @@ def create_app(test_config=None):
 
   @app.route('/questions')
   def get_questions():
-    selection = Question.query.order_by(Question.id).all()
-    current_questions = paginate_questions(request, selection)
+    questions = Question.query.order_by(Question.id).all()
+    current_questions = paginate_questions(request, questions)
 
     if len(current_questions) == 0:
       abort(404)
@@ -69,12 +68,35 @@ def create_app(test_config=None):
     response = {
         "success": True,
         "questions": current_questions,
-        "total_questions": len(selection),
+        "total_questions": len(questions),
         "current_category": None,
         "categories": categories_dict
       }
     return jsonify(response)
 
+  @app.route('/questions/<int:question_id>', methods=["DELETE"])
+  def delete_question(question_id):
+    try:
+      question = Question.query.filter(Question.id==question_id).one_or_none()
+
+      if question is None:
+        abort(404)
+
+      question.delete()
+
+      questions = Question.query.order_by(Question.id).all()
+      current_questions = paginate_questions(request, questions)
+      
+      response = {
+        "success": True,
+        "deleted": question_id,
+        "questions": current_questions,
+        "total_questions": len(questions)
+      }
+
+      return jsonify(response)
+    except:
+      abort(422)
 
 
   return app
