@@ -14,21 +14,23 @@ const QuestionView = () => {
   })
 
   const getQuestions = () => {
-    fetch(`http://localhost:5000/questions?page=${questionViewState.page}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      setQuestionViewState({
-        questions: data.questions,
-        page: questionViewState.page,
-        totalQuestions: data.total_questions,
-        categories: data.categories,
-        currentCategory: data.current_category
-      })
-    })
-    .catch(error => {
-      console.log(error)
-      alert('Unable to load questions. Please try your request again')
+    $.ajax({
+      url: `http://localhost:5000/questions?page=${questionViewState.page}`,
+      type: 'GET',
+      success: (result) => {
+        setQuestionViewState({
+          questions: result.questions,
+          page: questionViewState.page,
+          totalQuestions: result.total_questions,
+          categories: result.categories,
+          currentCategory: result.current_category
+        })
+        return;
+      },
+      error: (error) => {
+        alert('Unable to load questions. Please try your request again')
+        return;
+      }
     })
   }
 
