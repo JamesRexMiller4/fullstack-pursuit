@@ -3,7 +3,6 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-# import json
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
@@ -15,7 +14,7 @@ def paginate_questions(req, selection):
 
   questions = [question.format() for question in selection]
   current_questions = questions[start:end]
-
+  
   return current_questions
 
 
@@ -53,5 +52,40 @@ def create_app(test_config=None):
       "success": True,
       "categories": response
     })
+
+  @app.route('/questions')
+  def get_questions():
+    selection = Question.query.order_by(Question.id).all()
+    current_questions = paginate_questions(request, selection)
+
+    if len(current_questions) == 0:
+      abort(404)
+
+    questions = []
+
+    for question in current_questions:
+      questions.append(question["question"])
+
+    categories = Category.query.order_by(Category.id).all()
+
+    categories_array = []
+
+    for category in categories:
+      categories_array.append({
+        "id": category.id,
+        "type": category.type
+      })
+
+    response = {
+        "success": True,
+        "questions": questions,
+        "total_questions": len(selection),
+        "current_category": 1,
+        "categories": categories_array
+      }
+
+    return jsonify(response)
+
+
 
   return app
