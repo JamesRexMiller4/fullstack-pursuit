@@ -107,27 +107,39 @@ def create_app(test_config=None):
     new_answer = body.get('answer', None)
     new_category = body.get('category', None)
     new_difficulty = body.get('difficulty', None)
+    search = body.get('search', None)
 
-    try:
-      question = Question(question=new_question,answer=new_answer,category=new_category,difficulty=new_difficulty)
-      question.insert()
-
-      questions = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
+    if search: 
+      question = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
+      current_questions = paginate_questions(request, question)
 
       response = {
         "success": True,
-        "id": question.id,
-        "question": question.question,
-        "answer": question.answer,
-        "category": question.category,
-        "difficulty": question.difficulty,
         "questions": current_questions,
-        "total_questions": len(questions)
+        "total_questions": len(question.all())
       }
       return jsonify(response)
-    except:
-      abort(422)
 
+    else:
+      try:
+        question = Question(question=new_question,answer=new_answer,category=new_category,difficulty=new_difficulty)
+        question.insert()
+
+        questions = Question.query.order_by(Question.id).all()
+        current_questions = paginate_questions(request, questions)
+
+        response = {
+          "success": True,
+          "id": question.id,
+          "question": question.question,
+          "answer": question.answer,
+          "category": question.category,
+          "difficulty": question.difficulty,
+          "questions": current_questions,
+          "total_questions": len(questions)
+        }
+        return jsonify(response)
+      except:
+        abort(422)
 
   return app

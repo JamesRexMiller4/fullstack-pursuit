@@ -47,7 +47,8 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(data["total_questions"])
     self.assertTrue(data['categories'])
     self.assertEqual(data['current_category'], None)
-    # test for different pages
+
+  def test_get_questions_by_page(self):
     res = self.client().get('/questions?page=2')
     data = json.loads(res.data)
     self.assertEqual(res.status_code, 200)
@@ -81,7 +82,21 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(data["questions"])
     self.assertTrue(data["total_questions"] > 0)
 
+  def test_search_questions(self):
+    res = self.client().post('/questions', json={"search": "Abstract Expressionism"})
+    data = json.loads(res.data)
+    self.assertEqual(res.status_code, 200)
+    self.assertEqual(data['success'], True)
+    self.assertTrue(len(data["questions"]), 1)
+    self.assertTrue(data["total_questions"])
 
+  def test_search_no_results(self):
+    res = self.client().post('/questions', json={"search": "Munumuna"})
+    data = json.loads(res.data)
+    self.assertEqual(res.status_code, 200)
+    self.assertEqual(data['success'], True)
+    self.assertEqual(len(data["questions"]), 0)
+    self.assertEqual(data["total_questions"], 0)
 
 
   if __name__ == '__main__':
