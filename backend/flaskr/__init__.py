@@ -21,13 +21,14 @@ def paginate_questions(req, selection):
 def create_app(test_config=None):
   app = Flask(__name__)
   setup_db(app)
-  cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+  CORS(app)
+  # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
   @app.after_request
-  def after_request(res):
-    res.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    res.headers.add('Access-Control-Allow-Methods', 'GET, DELETE, POST')
-    return res
+  def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, DELETE, POST')
+    return response 
 
   @app.route('/')
   def index():
@@ -58,11 +59,6 @@ def create_app(test_config=None):
     if len(current_questions) == 0:
       abort(404)
 
-    questions = []
-
-    for question in current_questions:
-      questions.append(question["question"])
-
     categories = Category.query.order_by(Category.id).all()
 
     categories_dict = {}
@@ -72,12 +68,11 @@ def create_app(test_config=None):
 
     response = {
         "success": True,
-        "questions": questions,
+        "questions": current_questions,
         "total_questions": len(selection),
         "current_category": 1,
         "categories": categories_dict
       }
-
     return jsonify(response)
 
 
