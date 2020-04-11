@@ -70,7 +70,7 @@ def create_app(test_config=None):
         "success": True,
         "questions": current_questions,
         "total_questions": len(selection),
-        "current_category": 1,
+        "current_category": None,
         "categories": categories_dict
       }
     return jsonify(response)

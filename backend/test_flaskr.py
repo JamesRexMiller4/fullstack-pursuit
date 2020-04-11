@@ -39,7 +39,7 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(len(data["questions"]) <= 10)
     self.assertTrue(data["total_questions"])
     self.assertTrue(data['categories'])
-    self.assertTrue(data['current_category'])
+    self.assertEqual(data['current_category'], None)
     # test for different pages
     res = self.client().get('/questions?page=2')
     data = json.loads(res.data)
@@ -50,7 +50,7 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(len(data["questions"]) <= 10)
     self.assertTrue(data["total_questions"])
     self.assertTrue(data['categories'])
-    self.assertTrue(data['current_category'])
+    self.assertEqual(data['current_category'], None)
 
   if __name__ == '__main__':
     unittest.main()
