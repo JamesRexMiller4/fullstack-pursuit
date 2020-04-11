@@ -145,7 +145,7 @@ const QuestionView = () => {
             answer={q.answer}
             category={questionViewState.categories[q.category]} 
             difficulty={q.difficulty}
-            questionAction={questionAction}
+            questionAction={questionAction(q.id)}
           />
         ))}
         <div className="pagination-menu">
