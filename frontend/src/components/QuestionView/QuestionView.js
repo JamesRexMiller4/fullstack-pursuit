@@ -14,28 +14,26 @@ const QuestionView = () => {
   })
 
   const getQuestions = () => {
-    $.ajax({
-      url: `/questions?page=${questionViewState.page}`, //TODO: update request url
-      type: 'GET',
-      success: (result) => {
-        setQuestionViewState({
-          questions: result.questions,
-          totalQuestions: result.total_questions,
-          categories: result.categories,
-          currentCategory: result.current_category
-        })
-        return;
-      },
-      error: (error) => {
-        alert('Unable to load questions. Please try your request again')
-        return;
-      }
+    fetch(`http://localhost:5000/questions?page=${questionViewState.page}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      setQuestionViewState({
+        questions: data.questions,
+        totalQuestions: data.total_questions,
+        categories: data.categories,
+        currentCategory: data.current_category
+      })
+    })
+    .catch(error => {
+      console.log(error)
+      alert('Unable to load questions. Please try your request again')
     })
   }
 
   useEffect(() => {
     getQuestions();
-  })
+  }, [])
 
   const selectPage = (num) => {
     setQuestionViewState({...questionViewState, page:num}, () => getQuestions())
@@ -121,10 +119,10 @@ const QuestionView = () => {
   return ( 
     <div className='question-view'>
       <div className='categories-list'>
-        <h2 onClick={getQuestions}>Categories</h2>
+        <h2 onClick={() => getQuestions}>Categories</h2>
         <ul>
-          {Object.keys(questionViewState.categories).map((id) => (
-            <li key={id} onClick={getByCategory(id)}>
+          {questionViewState.categories && Object.keys(questionViewState.categories).map((id) => (
+            <li key={id} onClick={() => getByCategory(id)}>
               <img className='category' src={`${questionViewState.categories[id]}.svg`}/>
             </li>
           ))}
@@ -133,18 +131,18 @@ const QuestionView = () => {
       </div>
       <div className="questions-list">
         <h2>Questions</h2>
-        {questionViewState.questions.map((q, ind) => (
+        {questionViewState.questions && questionViewState.questions.map((q, ind) => (
           <Question
             key={q.id}
             question={q.question}
             answer={q.answer}
             category={questionViewState.categories[q.category]} 
             difficulty={q.difficulty}
-            questionAction={questionAction(q.id)}
+            questionAction={questionAction}
           />
         ))}
         <div className="pagination-menu">
-          {this.createPagination()}
+          {createPagination()}
         </div>
       </div>
     </div>

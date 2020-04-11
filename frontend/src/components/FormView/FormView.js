@@ -24,7 +24,7 @@ const FormView = () => {
         return;
       }
     })
-  })
+  }, [])
 
   const submitQuestion = (e) => {
     $.ajax({

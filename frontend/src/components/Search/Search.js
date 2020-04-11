@@ -12,7 +12,7 @@ const Search = ({ submitSearch }) => {
   }
 
   const handleInputChange = () => {
-    setSearch({ query: inputEl})
+    setSearch({query: inputEl})
   }
 
   return ( 

@@ -18,9 +18,9 @@ const App = () => {
       <Header path={'/'} />
       <Router>
         <Switch>
-          <Route path={'/'} exact component={QuestionView} />
-          <Route path={'/add'} component={FormView} />
-          <Route path={"/play"} component={QuizView} />
+          <Route path={'/'} exact render={() => <QuestionView/>} />
+          <Route path={'/add'} render={() => <FormView/>} />
+          <Route path={"/play"} render={() => <QuizView/>} />
           <Route component={QuestionView} />
         </Switch>
       </Router>
