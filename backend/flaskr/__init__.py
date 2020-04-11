@@ -65,20 +65,17 @@ def create_app(test_config=None):
 
     categories = Category.query.order_by(Category.id).all()
 
-    categories_array = []
+    categories_dict = {}
 
     for category in categories:
-      categories_array.append({
-        "id": category.id,
-        "type": category.type
-      })
+      categories_dict[category.id] = category.type
 
     response = {
         "success": True,
         "questions": questions,
         "total_questions": len(selection),
         "current_category": 1,
-        "categories": categories_array
+        "categories": categories_dict
       }
 
     return jsonify(response)
