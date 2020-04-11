@@ -19,6 +19,14 @@ class TriviaTestCase(unittest.TestCase):
       self.db.init_app(self.app)
       self.db.create_all()
 
+    self.new_question = {
+        "question": 'When Michael Jordan played for the Chicago Bulls, how many NBA\
+          championships did he win?',
+        "answer": "6",
+        "category": 6,
+        "difficulty": 2,
+      }
+
   def tearDown(self):
     pass
 
@@ -60,6 +68,20 @@ class TriviaTestCase(unittest.TestCase):
     self.assertEqual(data["deleted"], 4)
     self.assertTrue(data["questions"])
     self.assertTrue(data["total_questions"] > 10)
+
+  def test_post_question(self):
+    res = self.client().post('/questions', self.new_question)
+    data = json.loads(res.data)
+    self.assertEqual(res.status_code, 200)
+    self.assertEqual(data["success"], True)
+    self.assertTrue(data["id"])
+    self.assertEqual(data["question"], self.new_question["question"])
+    self.assertEqual(data["answer"], "6")
+    self.assertEqual(data["difficulty"], 2)
+    self.assertEqual(data["category"], 6)
+
+
+
 
   if __name__ == '__main__':
     unittest.main()
