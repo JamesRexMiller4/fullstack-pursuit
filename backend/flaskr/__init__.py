@@ -37,13 +37,10 @@ def create_app(test_config=None):
   def get_categories():
     categories = Category.query.order_by(Category.id).all()
 
-    response = []
+    response = {}
 
     for category in categories:
-      response.append({
-        "id": category.id,
-        "type": category.type
-      })
+      response[category.id] = category.type
 
     if len(categories) == 0:
       abort(404)
