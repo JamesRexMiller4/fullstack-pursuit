@@ -83,27 +83,27 @@ def create_app(test_config=None):
       if question is None:
         abort(404)
 
-      question.delete()
+      else:
+        question.delete()
 
-      questions = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, questions)
-      
-      response = {
-        "success": True,
-        "deleted": question_id,
-        "questions": current_questions,
-        "total_questions": len(questions)
-      }
+        questions = Question.query.order_by(Question.id).all()
+        current_questions = paginate_questions(request, questions)
+        
+        response = {
+          "success": True,
+          "deleted": question_id,
+          "questions": current_questions,
+          "total_questions": len(questions)
+        }
 
-      return jsonify(response)
+        return jsonify(response)
     except:
-      abort(422)
+      abort(404)
 
   @app.route('/questions', methods=['POST'])
   def post_question():
-    body = request.get_json()
-
     try:
+      body = request.get_json()
       new_question = body.get('question', None)
       new_answer = body.get('answer', None)
       new_category = body.get('category', None)
@@ -168,9 +168,8 @@ def create_app(test_config=None):
   @app.route('/quizzes', methods=["POST", "OPTIONS"])
   @cross_origin()
   def post_quiz_play(): 
-    body = request.get_json()
-
     try:
+      body = request.get_json()
       category = body.get("quiz_category", None)
       previous_questions = body.get("previous_questions", None)
 
