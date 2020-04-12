@@ -3,16 +3,17 @@ import './Search';
 
 const Search = ({ submitSearch }) => {
   const [ search, setSearch ] = useState({
-    query: ''
+    searchTerm: ''
   });
   const inputEl = useRef(null);
 
   const getInfo = (e) => {
-    submitSearch(search.query)
+    e.preventDefault()
+    submitSearch(search)
   }
 
   const handleInputChange = () => {
-    setSearch({query: inputEl})
+    setSearch({searchTerm: inputEl.current.value})
   }
 
   return ( 
@@ -20,6 +21,7 @@ const Search = ({ submitSearch }) => {
       <input 
         placeholder="Search questions..."
         ref={inputEl}
+        value={search.searchTerm}
         onChange={handleInputChange}/>
       <input type="submit" value='Submit' className='button' />
     </form>
