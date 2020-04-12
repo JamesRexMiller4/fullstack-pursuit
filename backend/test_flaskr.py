@@ -108,11 +108,19 @@ class TriviaTestCase(unittest.TestCase):
     self.assertTrue(data["current_category"])
 
   def test_post_quiz_play(self):
-    res = self.client().post('/quizzes', json={"quiz_category": {"id": 2, "type": "Art", "previous_questions": []})
+    res = self.client().post('/quizzes', json={"quiz_category": {"id": 2, "type": "Art"}, "previous_questions": []})
     data = json.loads(res.data)
     self.assertEqual(res.status_code, 200)
     self.assertEqual(data["success"], True)
     self.assertTrue(data["question"])
+
+  def test_422_error(self):
+    res = self.client().post('/quizzes', json={"quiz_category": "2", "previous_questions": []})
+    data = json.loads(res.data)
+    self.assertEqual(res.status_code, 422)
+    self.assertEqual(data["success"], False)
+    self.assertEqual(data["message"], 'Unprocessable')
+
 
   if __name__ == '__main__':
     unittest.main()
