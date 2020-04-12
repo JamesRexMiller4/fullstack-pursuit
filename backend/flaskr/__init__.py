@@ -113,12 +113,15 @@ def create_app(test_config=None):
       question = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
       current_questions = paginate_questions(request, question)
 
-      response = {
-        "success": True,
-        "questions": current_questions,
-        "total_questions": len(question.all())
-      }
-      return jsonify(response)
+      if len(current_questions):
+        response = {
+          "success": True,
+          "questions": current_questions,
+          "total_questions": len(question.all())
+        }
+        return jsonify(response)
+      else:
+        abort(404)
 
     else:
       try:
