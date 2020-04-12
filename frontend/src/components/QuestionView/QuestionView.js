@@ -85,16 +85,15 @@ const QuestionView = () => {
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify({ searchTerm: searchTerm }),
+      data: JSON.stringify(searchTerm),
       xhrFields: {
         withCredentials: true
       },
       crossDomain: true,
       success: (result) => {
-        setQuestionViewState({
+        setQuestionViewState({...questionViewState,
           questions: result.questions,
           totalQuestion: result.total_questions,
-          currentCategory: result.current_category
         })
         return;
       },
