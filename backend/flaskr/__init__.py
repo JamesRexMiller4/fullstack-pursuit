@@ -189,7 +189,7 @@ def create_app(test_config=None):
               new_list.append(question)
           
 
-          if len(new_list) > 1:
+          if len(new_list) > 0:
             random_index = random.randint(0, len(new_list) - 1)
             current_question = new_list[random_index]
             response = {
@@ -223,7 +223,7 @@ def create_app(test_config=None):
               if not question.__dict__["id"] in previous_questions:
                 new_list.append(question)
 
-            if len(new_list) > 1:
+            if len(new_list) > 0:
               random_index = random.randint(0, len(new_list) - 1)
               current_question = new_list[random_index]
               response = {
