@@ -75,10 +75,10 @@ const QuizView = () => {
   }
   
   useEffect(() => {
-    if (quizViewState.quizCategory && quizViewState.previousQuestions.length === 0) {
+    if (quizViewState.quizCategory) {
       getNextQuestion()
     }
-  }, [quizViewState.quizCategory, quizViewState.currentQuestion, getNextQuestion]) //eslint-disable-line
+  }, [quizViewState.quizCategory]) //eslint-disable-line
 
 
   const evaluateAnswer = () => {
