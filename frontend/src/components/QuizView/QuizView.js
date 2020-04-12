@@ -29,10 +29,14 @@ const QuizView = () => {
         return;
       }
     })
-  })
+  }, []) //eslint-disable-line
+
+  useEffect(() => {
+    getNextQuestion()
+  }, [quizViewState.quizCategory])
 
   const selectCategory = ({ type, id=0 }) => {
-    setQuizViewState({ ...quizViewState, quizCategory: {type, id}}, this.getNextQuestion)
+    setQuizViewState({ ...quizViewState, quizCategory: {type, id}})
   }
 
   const handleChange = (e) => {
