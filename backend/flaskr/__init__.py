@@ -161,4 +161,29 @@ def create_app(test_config=None):
       return jsonify(response)
     except:
       abort(422)
+
+  @app.route('/quizzes', methods=["POST"])
+  def post_quiz_play():
+      body = request.get_json()
+
+      category = body.get("quiz_category", None)
+      previous_questions = body.get("previous_questions", None)
+
+      questions = Question.query.order_by(Question.id).filter(Question.category==category).all()
+
+      current_question = questions[len(previous_questions)]
+
+      current_question = {
+        "id": current_question.__dict__["id"],
+        "question": current_question.__dict__["question"],
+        "answer": current_question.__dict__["answer"],
+        "category": current_question.__dict__["category"],
+        "difficulty": current_question.__dict__["difficulty"]
+      }
+      response = {
+        "success": True,
+        "question": current_question
+      }
+      return jsonify(response)
+
   return app
