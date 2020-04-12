@@ -114,13 +114,19 @@ class TriviaTestCase(unittest.TestCase):
     self.assertEqual(data["success"], True)
     self.assertTrue(data["question"])
 
-  def test_422_error(self):
+  def test_quizzes_422_error(self):
     res = self.client().post('/quizzes', json={"quiz_category": "2", "previous_questions": []})
     data = json.loads(res.data)
     self.assertEqual(res.status_code, 422)
     self.assertEqual(data["success"], False)
     self.assertEqual(data["message"], 'Unprocessable')
 
+  def test_get_questions_by_category_404_error(self):
+    res = self.client().get('/categories/9000/questions')
+    data = json.loads(res.data)
+    self.assertEqual(res.status_code, 404)
+    self.assertEqual(data["success"], False)
+    self.assertEqual(data["message"], 'Resource not found')
 
   if __name__ == '__main__':
     unittest.main()
