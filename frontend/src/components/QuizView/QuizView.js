@@ -31,25 +31,22 @@ const QuizView = () => {
     })
   }, []) //eslint-disable-line
 
-  useEffect(() => {
-    getNextQuestion()
-  }, [quizViewState.quizCategory])
-
+  
   const selectCategory = ({ type, id=0 }) => {
     setQuizViewState({ ...quizViewState, quizCategory: {type, id}})
   }
 
   const handleChange = (e) => {
-    setQuizViewState({ ...quizViewState, [e.target.name]: e.target.value})
+    setQuizViewState({ ...quizViewState, guess: e.target.value})
   }
 
   const getNextQuestion = () => {
-    const previousQuestions = [...quizViewState.questions]
-    if (quizViewState.currentQuestion.id) { previousQuestions.push(quizViewState.currentQuestion.id)}
+    const previousQuestions = [...quizViewState.previousQuestions]
+    if (quizViewState.currentQuestion.id) { previousQuestions.push(quizViewState.currentQuestion.id) }  
 
     $.ajax({
-      url: `http://localhost:5000/quizzes`,
-      type: 'POST',
+      url: 'http://localhost:5000/quizzes',
+      type: "POST",
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -61,7 +58,7 @@ const QuizView = () => {
       },
       crossDomain: true,
       success: (result) => {
-        setQuizViewState({
+        setQuizViewState({...quizViewState,
           showAnswer: false,
           previousQuestions: previousQuestions,
           currentQuestion: result.question,
@@ -76,14 +73,26 @@ const QuizView = () => {
       }
     })
   }
+  
+  useEffect(() => {
+    if (quizViewState.quizCategory && quizViewState.previousQuestions.length === 0) {
+      getNextQuestion()
+    }
+  }, [quizViewState.quizCategory, quizViewState.currentQuestion, getNextQuestion]) //eslint-disable-line
+
 
   const evaluateAnswer = () => {
     const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() //eslint-disable-line
-    const answerArray = quizViewState.currentQuestion.answer.toLowerCase().split(' ');
-    return answerArray.includes(formatGuess)
+    if (formatGuess === quizViewState.currentQuestion.answer.toLowerCase()) {
+      return true
+    } else {
+      const answerArray = quizViewState.currentQuestion.answer.toLowerCase().split(' ');
+      return answerArray.includes(formatGuess)
+    }
   }
 
   const submitGuess = (e) => {
+    e.preventDefault()
     const formatGuess = quizViewState.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() //eslint-disable-line
     let evaluate = evaluateAnswer();
     setQuizViewState({
@@ -118,7 +127,7 @@ const QuizView = () => {
               key={id}
               value={id}
               className="play-category"
-              onClick={selectCategory({type: quizViewState.categories[id], id})}>
+              onClick={() => selectCategory({type: quizViewState.categories[id], id})}>
               {quizViewState.categories[id]}
             </div>)
           })}
@@ -131,7 +140,7 @@ const QuizView = () => {
     return(
       <div className="quiz-play-holder">
         <div className="final-header"> Your Final Score is {quizViewState.numCorrect}</div>
-        <div className="play-again button" onClick={restartGame}> Play Again? </div>
+        <div className="play-again button" onClick={() => restartGame()}> Play Again? </div>
       </div>
     )
   }
@@ -144,7 +153,7 @@ const QuizView = () => {
         <div className="quiz-question">{quizViewState.currentQuestion.question}</div>
         <div className={`${evaluate ? 'correct' : 'wrong'}`}>{evaluate ? "You were correct!" : "You were incorrect"}</div>
         <div className="quiz-answer">{quizViewState.currentQuestion.answer}</div>
-        <div className="next-question button" onClick={getNextQuestion}> Next Question </div>
+        <div className="next-question button" onClick={() => getNextQuestion()}> Next Question </div>
       </div>
     )
   }
@@ -158,7 +167,7 @@ const QuizView = () => {
           <div className="quiz-play-holder">
             <div className="quiz-question">{quizViewState.currentQuestion.question}</div>
             <form onSubmit={submitGuess}>
-              <input type="text" name="guess" onChange={handleChange}/>
+              <input type="text" name="guess" value={quizViewState.guess} onChange={handleChange}/>
               <input className="submit-guess button" type="submit" value="Submit Answer" />
             </form>
           </div>
