@@ -24,7 +24,7 @@ const FormView = () => {
         return;
       }
     })
-  }, [])
+  }, []) //eslint-disable-line
 
   const submitQuestion = (e) => {
     $.ajax({

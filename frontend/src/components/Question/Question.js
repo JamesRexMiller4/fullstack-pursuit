@@ -12,9 +12,9 @@ const Question = ({ question, questionAction, answer, category, difficulty }) =>
     <div className='Question-holder'>
       <div className='Question'>{question}</div>
       <div className='Question-status'>
-        <img className='category' src={`${category}.svg`}/>
+        <img className='category' alt={category} src={`${category}.svg`}/>
         <div className='difficulty'>Difficulty: {difficulty}</div>
-        <img src='delete.png' className='delete' onClick={() => questionAction('DELETE')}/>
+        <img src='delete.png' alt='delete' className='delete' onClick={() => questionAction('DELETE')}/>
       </div>
       <div className='show-answer button' onClick={flipVisibility}>
         {visibleAnswer ? 'Hide' : 'Show'} Answer

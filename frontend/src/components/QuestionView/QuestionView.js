@@ -36,11 +36,11 @@ const QuestionView = () => {
 
   useEffect(() => {
     getQuestions();
-  }, [])
+  }, []) //eslint-disable-line
 
   useEffect(() => {
     getQuestions()
-  }, [questionViewState.page])
+  }, [questionViewState.page]) //eslint-disable-line
 
   const selectPage = (num) => {
     setQuestionViewState({...questionViewState, page:num})
@@ -129,7 +129,7 @@ const QuestionView = () => {
         <ul>
           {questionViewState.categories && Object.keys(questionViewState.categories).map((id) => (
             <li key={id} onClick={() => getByCategory(id)}>
-              <img className='category' src={`${questionViewState.categories[id]}.svg`}/>
+              <img className='category' alt={questionViewState.categories[id]} src={`${questionViewState.categories[id]}.svg`}/>
             </li>
           ))}
         </ul>
