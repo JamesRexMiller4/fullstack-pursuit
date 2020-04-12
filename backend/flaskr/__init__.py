@@ -1,7 +1,7 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import random
 from models import setup_db, Question, Category
 
@@ -26,7 +26,7 @@ def create_app(test_config=None):
   @app.after_request
   def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, DELETE, POST')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, DELETE, POST, OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response 
 
@@ -103,28 +103,28 @@ def create_app(test_config=None):
   def post_question():
     body = request.get_json()
 
-    new_question = body.get('question', None)
-    new_answer = body.get('answer', None)
-    new_category = body.get('category', None)
-    new_difficulty = body.get('difficulty', None)
-    search = body.get('searchTerm', None)
+    try:
+      new_question = body.get('question', None)
+      new_answer = body.get('answer', None)
+      new_category = body.get('category', None)
+      new_difficulty = body.get('difficulty', None)
+      search = body.get('searchTerm', None)
 
-    if search: 
-      question = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
-      current_questions = paginate_questions(request, question)
+      if search: 
+        question = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
+        current_questions = paginate_questions(request, question)
 
-      if len(current_questions):
-        response = {
-          "success": True,
-          "questions": current_questions,
-          "total_questions": len(question.all())
-        }
-        return jsonify(response)
+        if len(current_questions):
+          response = {
+            "success": True,
+            "questions": current_questions,
+            "total_questions": len(question.all())
+          }
+          return jsonify(response)
+        else:
+          abort(404)
+
       else:
-        abort(404)
-
-    else:
-      try:
         question = Question(question=new_question,answer=new_answer,category=new_category,difficulty=new_difficulty)
         question.insert()
 
@@ -142,8 +142,8 @@ def create_app(test_config=None):
           "total_questions": len(questions)
         }
         return jsonify(response)
-      except:
-        abort(422)
+    except:
+      abort(422)
 
   @app.route('/categories/<int:category_id>/questions')
   def get_questions_by_category(category_id):
@@ -157,33 +157,35 @@ def create_app(test_config=None):
         "total_questions": len(questions),
         "current_category": category_id
       }
-
       return jsonify(response)
     except:
       abort(422)
 
-  @app.route('/quizzes', methods=["POST"])
-  def post_quiz_play():
-      body = request.get_json()
-
+  @app.route('/quizzes', methods=["POST", "OPTIONS"])
+  @cross_origin()
+  def post_quiz_play(): 
+    body = request.get_json()
+    print(body)
+    try:
       category = body.get("quiz_category", None)
       previous_questions = body.get("previous_questions", None)
 
-      questions = Question.query.order_by(Question.id).filter(Question.category==category).all()
+      if category["id"] == 0:
+        questions = Question.query.order_by(Question.id).all()
+        current_question = questions[len(previous_questions)]
+      else:
+        questions = Question.query.order_by(Question.id).filter(Question.category==category["id"]).all()
+        current_question = questions[len(previous_questions)]
 
-      current_question = questions[len(previous_questions)]
-
-      current_question = {
-        "id": current_question.__dict__["id"],
-        "question": current_question.__dict__["question"],
-        "answer": current_question.__dict__["answer"],
-        "category": current_question.__dict__["category"],
-        "difficulty": current_question.__dict__["difficulty"]
-      }
-      response = {
-        "success": True,
-        "question": current_question
-      }
-      return jsonify(response)
+      if current_question is None:
+        abort(404)
+      else:
+        response = {
+          "success": True,
+          "question": current_question.format()
+        }
+        return jsonify(response)
+    except:
+      abort(422)
 
   return app
