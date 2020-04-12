@@ -65,7 +65,7 @@ const QuestionView = () => {
       url: `http://localhost:5000/categories/${id}/questions`,
       type: 'GET',
       success: (result) => {
-        setQuestionViewState({
+        setQuestionViewState({...questionViewState,
           questions: result.questions,
           totalQuestions: result.total_questions,
           currentCategory: result.current_category
