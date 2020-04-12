@@ -145,4 +145,20 @@ def create_app(test_config=None):
       except:
         abort(422)
 
+  @app.route('/categories/<int:category_id>/questions')
+  def get_questions_by_category(category_id):
+    try:
+      questions = Question.query.order_by(Question.id).filter(Question.category==category_id).all()
+      current_questions = paginate_questions(request, questions)
+
+      response = {
+        "success": True,
+        "questions": current_questions,
+        "total_questions": len(questions),
+        "current_category": category_id
+      }
+
+      return jsonify(response)
+    except:
+      abort(422)
   return app
