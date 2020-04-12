@@ -165,26 +165,78 @@ def create_app(test_config=None):
   @cross_origin()
   def post_quiz_play(): 
     body = request.get_json()
-    print(body)
+
     try:
       category = body.get("quiz_category", None)
       previous_questions = body.get("previous_questions", None)
 
-      if category["id"] == 0:
+      if category["id"] == 0 and len(previous_questions) == 0:
         questions = Question.query.order_by(Question.id).all()
-        current_question = questions[len(previous_questions)]
-      else:
-        questions = Question.query.order_by(Question.id).filter(Question.category==category["id"]).all()
-        current_question = questions[len(previous_questions)]
-
-      if current_question is None:
-        abort(404)
-      else:
+        random_index = random.randint(0, len(questions) - 1)
+        current_question = questions[random_index]
         response = {
-          "success": True,
-          "question": current_question.format()
-        }
+              "success": True,
+              "question": current_question.format()
+            }
         return jsonify(response)
+      else:
+        if category["id"] == 0:
+          questions = Question.query.order_by(Question.id).all()
+          new_list = []
+
+          for question in questions:
+            if not question.__dict__["id"] in previous_questions:
+              new_list.append(question)
+          
+
+          if len(new_list) > 1:
+            random_index = random.randint(0, len(new_list) - 1)
+            current_question = new_list[random_index]
+            response = {
+              "success": True,
+              "question": current_question.format()
+            }
+            return jsonify(response)
+          else:
+            response = {
+            "success": True,
+            "question": False
+            }
+            return jsonify(response)
+
+        else:
+          if len(previous_questions) == 0:
+            questions = Question.query.order_by(Question.id).filter(Question.category==category["id"]).all()
+            random_index = random.randint(0, len(questions) - 1)
+            current_question = questions[random_index]
+
+            response = {
+              "success": True,
+              "question": current_question.format()
+            }
+            return jsonify(response)
+          else: 
+            questions = Question.query.order_by(Question.id).filter(Question.category==category["id"]).all()
+            new_list = []
+
+            for question in questions:
+              if not question.__dict__["id"] in previous_questions:
+                new_list.append(question)
+
+            if len(new_list) > 1:
+              random_index = random.randint(0, len(new_list) - 1)
+              current_question = new_list[random_index]
+              response = {
+                "success": True,
+                "question": current_question.format()
+              }
+              return jsonify(response)
+            else:
+              response = {
+              "success": True,
+              "question": False
+              }
+              return jsonify(response)
     except:
       abort(422)
 
