@@ -17,7 +17,6 @@ def paginate_questions(req, selection):
   
   return current_questions
 
-
 def create_app(test_config=None):
   app = Flask(__name__)
   setup_db(app)
