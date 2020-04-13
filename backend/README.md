@@ -1,4 +1,4 @@
-# Getting Started¶
+# Getting Started
 ### Pre-requisites and Local Development
 Developers using this project should already have Python3, pip and node installed on their local machines. Before installing the requirements, be sure to create a virtual env in the root repository. Instructions on how to do so for your respective operating system, can be found at the link (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 ##Backend
@@ -36,17 +36,7 @@ The first time you run the tests, omit the dropdb command
 
 **METHOD** | **ENDPOINT** | **RESPONSE**
 --- | --- | ---
-**GET** | /categories | `{
-categories: {
-1: "Science",
-2: "Art",
-3: "Geography",
-4: "History",
-5: "Entertainment",
-6: "Sports"
-},
-success: true
-}`
+**GET** | /categories | `{categories: {1: "Science",2: "Art",3: "Geography",4: "History",5: "Entertainment",6: "Sports"},success: true}`
 **GET** | /questions | `{
   categories: {1: 'Science', 2: 'Art', ...},
   current_category: null,
