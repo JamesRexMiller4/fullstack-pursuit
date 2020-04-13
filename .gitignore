@@ -1,6 +1,9 @@
 .vscode
 env
 __pycache__
+/backend/flaskr/__init__.pyc
+/backend/models.pyc
+/backend/test_flaskr.pyc
 
 ##FrontEnd 
 
