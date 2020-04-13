@@ -30,9 +30,6 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response 
 
-  @app.route('/')
-  def index():
-    return ':)'
 
   @app.route('/categories')
   def get_categories():
