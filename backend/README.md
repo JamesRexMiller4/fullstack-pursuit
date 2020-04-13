@@ -60,7 +60,3 @@ The first time you run the tests, omit the dropdb command
 **GET** | /category/<int:category_id>/questions | `{"success": True, "questions": [{question: '',answer: ''}, ... ], "total_questions": 10,"current_category": 1}`
 **POST** | /quizzes - The request should be sent with a body of: `{current_category: 4, previous_questions: [20, 12]}` | `{ "success": True, "question": {question: 'How many times..., answer: '', difficulty: ...}}`
 
-
-## Authors
-
-James Miller
