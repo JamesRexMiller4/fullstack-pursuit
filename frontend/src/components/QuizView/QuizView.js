@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './QuizView.css';
+import './QuizView.scss';
 import $ from 'jquery';
 
 const questionsPerPlay = 5;

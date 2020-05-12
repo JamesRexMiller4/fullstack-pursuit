@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './QuestionView.css';
+import './QuestionView.scss';
 import Question from '../Question/Question';
 import Search from '../Search/Search';
 import $ from 'jquery';

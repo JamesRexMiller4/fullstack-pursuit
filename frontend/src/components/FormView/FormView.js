@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import $ from 'jquery';
-import './FormView.css';
+import './FormView.scss';
 
 const FormView = () => {
   const [ form, setForm ] = useState({

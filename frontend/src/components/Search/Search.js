@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import './Search';
+import './Search.scss';
 
 const Search = ({ submitSearch }) => {
   const [ search, setSearch ] = useState({

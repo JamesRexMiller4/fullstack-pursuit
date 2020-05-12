@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Question.css';
+import './Question.scss';
 
 const Question = ({ question, questionAction, answer, category, difficulty }) => {
   const [ visibleAnswer, setVisibleAnswer ] = useState(false)
