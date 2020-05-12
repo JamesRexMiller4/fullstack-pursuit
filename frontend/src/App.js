@@ -3,9 +3,9 @@ import {
   BrowserRouter as Router,
   Route,
   Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-import './App.css';
+import './App.scss';
 import FormView from './components/FormView/FormView';
 import QuestionView from './components/QuestionView/QuestionView';
 import Header from './components/Header/Header';

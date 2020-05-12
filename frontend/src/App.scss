@@ -7,17 +7,16 @@
   padding: 20px;
   padding-right: 40%;
   padding-left: 5%;
+
+  h1 {
+    font-family: 'Pacifico', cursive;
+    color: dodgerblue;
+  }
 }
 
-.App-header > h1 {
-  color: dodgerblue;
-}
-
-.App-intro {
-  font-size: large;
-}
 
 h2 {
+  font-family: 'Pacifico', cursive;
   text-align: center;
 }
 
@@ -36,4 +35,8 @@ form {
   flex-direction: column;
   width: 80%;
   margin: auto;
+}
+
+.App-intro {
+  font-size: large;
 }
